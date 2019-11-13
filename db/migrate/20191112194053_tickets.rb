@@ -1,4 +1,4 @@
-class CreateTickets < ActiveRecord::Migration[6.0]
+class Tickets < ActiveRecord::Migration[6.0]
   def change
     create_table :tickets do |t|
       t.integer :seat
