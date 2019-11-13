@@ -60,12 +60,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord
   pry
   rake
   require_all
   rspec
   sinatra-activerecord
-  sqlite3 (~> 1.4)
+  sqlite3
 
 BUNDLED WITH
    2.0.2
