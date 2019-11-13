@@ -1,4 +1,4 @@
-class Concerts < ActiveRecord::Migration[6.0]
+class CreateConcerts < ActiveRecord::Migration[6.0]
   def change
     create_table :concerts do |t|
       t.string :bands
