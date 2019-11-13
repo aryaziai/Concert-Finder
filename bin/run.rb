@@ -6,7 +6,7 @@ user_input = nil
 
 until user_input == "quit"
     nc.greetings
-    sleep 2
+    sleep 6
     nc.waiting
     sleep 2.5
     nc.add_customer

@@ -6,11 +6,22 @@ class ConcertFinder
         @ticket = nil
         @concert = nil
         @b = "\nBooking Agent:"
-        @s = "~~~~~"
     end
  
     def greetings
-        puts "\n{#@s} Welcome to ConcertFinder.com {#@s}"
+        puts "
+        ___                          _   
+        / __\___  _ __   ___ ___ _ __| |_ 
+       / /  / _ \| '_ \ / __/ _ \ '__| __|
+      / /__| (_) | | | | (_|  __/ |  | |_ 
+      \____/\___/|_| |_|\___\___|_|   \__|
+                                          
+         ___ _           _           
+        / __(_)_ __   __| | ___ _ __ 
+       / _\ | | '_ \ / _` |/ _ \ '__|
+      / /   | | | | | (_| |  __/ |   
+      \/    |_|_| |_|\__,_|\___|_|   
+      \n\nWelcome To ConcertFinder.com!"
     end
 
     def waiting
