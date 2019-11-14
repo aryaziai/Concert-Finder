@@ -9,3 +9,5 @@ gem 'rake'
 gem 'sinatra-activerecord'
 gem 'activerecord'
 gem 'faker'
+gem "rest-client"
+gem 'json'
