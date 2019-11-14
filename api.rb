@@ -69,10 +69,19 @@ end
 
 # thesmiths = Concert.new(band: "The Smiths", date: "2019-11-14", venue: "Slims", address: "11th Street", price: "$20")
 # puts concerts
+band_str = "BAND"
+date_str = "DATE"
+venue_str = "VENUE"
+address_str = "ADDRESS"
+price_str = "PRICE"
+justified_chars = 30
 
-puts "# | Band | Date | Venue | Address | Price"
+# PUTS THE CONCERT INFO HEADER ONCE
+puts "#  #{band_str.ljust(justified_chars)} | #{date_str.ljust(justified_chars)} | #{venue_str.ljust(justified_chars)} | #{address_str.ljust(justified_chars)} | #{price_str.ljust(justified_chars)}"
+
+# PUTS EACH CONCERT INFO IN ROWS
 Concert.all.each_with_index do |concert, index|
-    puts "#{index + 1}. #{concert.band} | #{concert.date} | #{concert.venue} | #{concert.address} | #{concert.price}"
+    puts "#{index + 1}. #{concert.band.ljust(justified_chars)} | #{concert.date.ljust(justified_chars)} | #{concert.venue.ljust(justified_chars)} | #{concert.address.ljust(justified_chars)} | #{concert.price.ljust(justified_chars)}"
 end
 
 
