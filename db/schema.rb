@@ -13,11 +13,11 @@
 ActiveRecord::Schema.define(version: 2019_11_13_195325) do
 
   create_table "concerts", force: :cascade do |t|
-    t.string "bands"
+    t.string "band"
     t.string "date"
     t.string "venue"
     t.string "address"
-    t.integer "price"
+    t.string "price"
   end
 
   create_table "customers", force: :cascade do |t|
