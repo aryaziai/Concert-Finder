@@ -39,9 +39,9 @@ end
 
 
 # instantiate customers
-will = Customer.create(name: "Will")
-joseph = Customer.create(name: "Joseph")
-arya = Customer.create(name: "Arya")
+# will = Customer.create(name: "Will")
+# joseph = Customer.create(name: "Joseph")
+# arya = Customer.create(name: "Arya")
 
 # instantiate tickets
 
@@ -68,7 +68,7 @@ arya = Customer.create(name: "Arya")
 
 concert_info
 
-binding.pry
+# binding.pry
 
 puts "seed file"
 

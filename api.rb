@@ -1,8 +1,7 @@
+require_relative "config/environment"
 require "pry"
 require "rest-client"
 require 'json'
-
-require 'rest-client'
 
 # puts "Please enter zip code"
 # user_input = gets.chomp
@@ -63,5 +62,20 @@ require 'rest-client'
 # puts JSON.pretty_generate(response_hash)
 
 
-# binding.pry
+def concerts
+    Concert.all
+end 
 
+
+# thesmiths = Concert.new(band: "The Smiths", date: "2019-11-14", venue: "Slims", address: "11th Street", price: "$20")
+# puts concerts
+
+puts "# | Band | Date | Venue | Address | Price"
+Concert.all.each_with_index do |concert, index|
+    puts "#{index + 1}. #{concert.band} | #{concert.date} | #{concert.venue} | #{concert.address} | #{concert.price}"
+end
+
+
+
+
+binding.pry
