@@ -1,8 +1,8 @@
 require_relative "../config/environment"
 
-# will = Customer.create(name: "Will")
-# joseph = Customer.create(name: "Joseph")
-# arya = Customer.create(name: "Arya")
+will = Customer.create(name: "Will",username:"will2")
+joseph = Customer.create(name: "Joseph",username: "joe1")
+arya = Customer.create(name: "Arya",username: "arya721")
 
 # thesmiths = Concert
 

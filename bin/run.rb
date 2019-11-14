@@ -12,6 +12,9 @@ until user_input == "quit"
     nc.add_customer
     # sleep 3
     nc.returning_customer
+    # sleep 3
+    nc.zip_code
+    # sleep 3
     puts "\nBooking Agent: Would you like to purchase another ticket? 'Yes' or 'No'\n\n"
     user_input= gets.chomp.downcase
     if user_input == 'no' or user_input == "exit" or user_input == "quit"
