@@ -14,7 +14,7 @@ ActiveRecord::Schema.define(version: 2019_11_13_195325) do
 
   create_table "concerts", force: :cascade do |t|
     t.string "bands"
-    t.datetime "date"
+    t.string "date"
     t.string "venue"
     t.string "address"
     t.integer "price"
@@ -25,7 +25,6 @@ ActiveRecord::Schema.define(version: 2019_11_13_195325) do
   end
 
   create_table "tickets", force: :cascade do |t|
-    t.integer "seat"
     t.integer "customer_id"
     t.integer "concert_id"
   end
