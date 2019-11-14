@@ -46,7 +46,6 @@ end
 # instantiate tickets
 
 
-
 # def genre_list
 #     # events.first["performers"].first["genres"].first["name"]
 #     events = api_response_hash["events"]

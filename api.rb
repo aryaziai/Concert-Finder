@@ -62,9 +62,7 @@ require 'json'
 # puts JSON.pretty_generate(response_hash)
 
 
-def concerts
-    Concert.all
-end 
+
 
 
 # thesmiths = Concert.new(band: "The Smiths", date: "2019-11-14", venue: "Slims", address: "11th Street", price: "$20")
