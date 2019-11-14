@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2019_11_13_195325) do
 
   create_table "customers", force: :cascade do |t|
     t.string "name"
+    t.string "username"
   end
 
   create_table "tickets", force: :cascade do |t|

@@ -1,4 +1,5 @@
 class ConcertFinder
+    require 'pry'
     attr_accessor :customer, :ticket, :concert
 
     def initialize
@@ -41,11 +42,52 @@ class ConcertFinder
 
     def add_customer
         puts "#{@b} What's your name?\n\n"
-        n = gets.chomp
-        @customer = Customer.find_or_create_by(name: n)
-        sleep 2
-        puts "#{@b} Nice to meet you #{@customer.name}.."
+        @n = gets.chomp
+        #@new_customer = Customer.create(name: n) #just use instance variable. and run this code after email is inputted
+        #sleep 2
+        puts "#{@b} Nice to meet you #{@n}.."
     end
 
 
+
+    # think about renaming this method to ask if returning customer or something similar
+    def returning_customer
+        puts "#{@b} Do you have an existing account with us? 'Yes' or 'No'\n\n"
+        answer = gets.chomp.downcase
+        if answer == "yes"
+            puts "#{@b} Please type username:\n\n"
+            username_input = gets.chomp.downcase
+            binding.pry
+            if username_input == Customer.find_by(username: username_input).username
+                puts "#{@b} Welcome back #{username_input}"
+            else 
+                puts "#{@b}We couldn't find #{username_input}, so we created a new account!"
+                Customer.create(username: username_input, name: @n)
+            end
+        elsif answer == "no"
+            create_username
+        else 
+            puts "#{@b} I don't understand. Please try again.."
+            sleep 2
+            returning_customer
+        end
+    end
+
+
+
+    def create_username #helper method
+        puts "#{@b} Please create username:\n\n"
+        username_input = gets.chomp.downcase
+        if username_input == Customer.find_by(username: username_input).username
+            puts "#{@b} Sorry #{username_input} is taken. Please try again.."
+            sleep 2
+            create_username
+        else
+            Customer.create(username: username_input, name: @n)
+            puts "#{@b} #{username_input} is available!"
+        end
+    end
+                
+        
 end
+  
