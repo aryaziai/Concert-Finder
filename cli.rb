@@ -1,10 +1,10 @@
 require_relative "config/environment"
 require "rest-client"
 require 'json'
+require 'pry'
 
 
 class ConcertFinder
-    require 'pry'
     attr_accessor :customer, :ticket, :concert
 
     def initialize
@@ -54,26 +54,26 @@ class ConcertFinder
     end
 
 
-    def returning_customer
-        puts "#{@b} Do you have an existing account with us? 'Yes' or 'No'\n\n"
-        answer = gets.chomp.downcase
-        if answer == "yes"
-            puts "#{@b} Please type username:\n\n"
-            username_input = gets.chomp.downcase
-            if Customer.find_by(username: username_input)
-                puts "#{@b} Welcome back #{username_input}!"
-            else 
-                puts "#{@b}We couldn't find #{username_input}, so we created a new account!"
-                Customer.create(username: username_input, name: @n)
-            end
-        elsif answer == "no"
-            create_username
-        else 
-            puts "#{@b} I don't understand. Please try again.."
-            sleep 2
-            returning_customer
-        end
-    end
+    # def returning_customer
+    #     puts "#{@b} Do you have an existing account with us? 'Yes' or 'No'\n\n"
+    #     answer = gets.chomp.downcase
+    #     if answer == "yes"
+    #         puts "#{@b} Please type username:\n\n"
+    #         username_input = gets.chomp.downcase
+    #         if Customer.find_by(username: username_input)
+    #             puts "#{@b} Welcome back #{username_input}!"
+    #         else 
+    #             puts "#{@b}We couldn't find #{username_input}, so we created a new account!"
+    #             new_customer = Customer.create(username: username_input, name: @n)
+    #         end
+    #     elsif answer == "no"
+    #         create_username
+    #     else 
+    #         puts "#{@b} Sorry I don't understand. Please try again.."
+    #         sleep 2
+    #         returning_customer
+    #     end
+    # end
 
 
 
@@ -85,7 +85,7 @@ class ConcertFinder
             sleep 2
             create_username
         else
-            Customer.create(username: username_input, name: @n)
+            new_customer_obj = Customer.create(username: username_input, name: @n)
             puts "#{@b} #{username_input} is available! Account has been created."
         end
     end
@@ -110,12 +110,12 @@ class ConcertFinder
 
     end
 
-
-
+   
+    
+    
     def concert_instantiation(response_hash)
         events = response_hash["events"]
-
-        concert_array = []
+        $concert_array = []
 
         events.each do |event|
             # event["venue"].each do |venue|
@@ -133,14 +133,12 @@ class ConcertFinder
             # puts
             # end 
 
-
-
             concert = Concert.create(band: band, date: date, venue: venue, address: address, price: price)
 
-            concert_array << concert
+            $concert_array << concert
 
         end
-        display_concerts_select(concert_array)
+        display_concerts_select($concert_array)
     end
 
 
@@ -177,10 +175,35 @@ class ConcertFinder
         concert_array.each_with_index do |concert, index|
             puts "#{index + 1}. #{concert.band.ljust(justified_chars)} | #{concert.date.ljust(justified_chars)} | #{concert.venue.ljust(justified_chars)} | #{concert.address.ljust(justified_chars)} | #{concert.price.ljust(justified_chars)}"
         end
+
     end
         
+    def select_concert
+        puts "#{@b} Please type number for your concert:"
+        concert_input = gets.chomp.to_i
+            # if concert_input.length != 1 || concert_input.length != 2
+            #     puts "#{@b} Sorry I don't understand. Please try again.."
+            #     sleep 2
+            #     select_concert
+            # end 
+        user_selection_number = concert_input - 1
+    end
 
+    def create_new_ticket_from_user
+        concert_instance = $concert_array[select_concert]
+        # binding.pry
+        #gives customer obj
+        # customer_id = returning_customer.id
+        customer_id = new_customer_obj
+        binding.pry
+        Ticket.new(customer_id: customer_id, concert_id: concert_instance.id)
+        # binding.pry
+    end
 
+    def return_user_ticket_confirmation
+        # user_selection_number = concert_input - 1
+        # puts "You have successfully purchased ticket"
+    end
 
     
 
