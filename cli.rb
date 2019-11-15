@@ -54,26 +54,28 @@ class ConcertFinder
     end
 
 
-    # def returning_customer
-    #     puts "#{@b} Do you have an existing account with us? 'Yes' or 'No'\n\n"
-    #     answer = gets.chomp.downcase
-    #     if answer == "yes"
-    #         puts "#{@b} Please type username:\n\n"
-    #         username_input = gets.chomp.downcase
-    #         if Customer.find_by(username: username_input)
-    #             puts "#{@b} Welcome back #{username_input}!"
-    #         else 
-    #             puts "#{@b}We couldn't find #{username_input}, so we created a new account!"
-    #             new_customer = Customer.create(username: username_input, name: @n)
-    #         end
-    #     elsif answer == "no"
-    #         create_username
-    #     else 
-    #         puts "#{@b} Sorry I don't understand. Please try again.."
-    #         sleep 2
-    #         returning_customer
-    #     end
-    # end
+    def returning_customer
+        puts "#{@b} Do you have an existing account with us? 'Yes' or 'No'\n\n"
+        answer = gets.chomp.downcase
+        if answer == "yes"
+            puts "#{@b} Please type username:\n\n"
+            username_input = gets.chomp.downcase
+            if Customer.find_by(username: username_input)
+                self.customer = Customer.find_by(username: username_input)
+                # binding.pry
+                puts "#{@b} Welcome back #{username_input}!"
+            else 
+                puts "#{@b}We couldn't find #{username_input}, so we created a new account!"
+                self.customer = Customer.create(username: username_input, name: @n)
+            end
+        elsif answer == "no"
+            create_username
+        else 
+            puts "#{@b} Sorry I don't understand. Please try again.."
+            sleep 2
+            returning_customer
+        end
+    end
 
 
 
@@ -85,7 +87,7 @@ class ConcertFinder
             sleep 2
             create_username
         else
-            new_customer_obj = Customer.create(username: username_input, name: @n)
+            self.customer = Customer.create(username: username_input, name: @n)
             puts "#{@b} #{username_input} is available! Account has been created."
         end
     end
@@ -98,13 +100,23 @@ class ConcertFinder
 
 
 
-
+    def zip_code 
+        puts "#{@b} Please type zip code to find upcoming concerts:\n\n"
+        zip_code_input = gets.chomp
+            if zip_code_input.length != 5
+                puts "#{@b} Sorry, we need a 5 digit U.S. zip code"
+                sleep 2
+                zip_code
+            else 
+                api_response_hash(zip_code_input.to_i)
+            end
+    end
 
 
     def api_response_hash(zip_code_input)
         response_string = RestClient.get("https://api.seatgeek.com/2/events?taxonomies.name=concert&postal_code=#{zip_code_input}&client_id=MTk0MjAzMjZ8MTU3MzUwOTAyMy40OQ")
         response_hash = JSON.parse(response_string)
-
+        # binding.pry
         concert_instantiation(response_hash)
         
 
@@ -112,7 +124,7 @@ class ConcertFinder
 
    
     
-    
+    # Populates our DB & global concert_array
     def concert_instantiation(response_hash)
         events = response_hash["events"]
         $concert_array = []
@@ -143,17 +155,7 @@ class ConcertFinder
 
 
 
-    def zip_code 
-        puts "#{@b} Please type zip code to find upcoming concerts:\n\n"
-        zip_code_input = gets.chomp
-            if zip_code_input.length != 5
-                puts "#{@b} Sorry, we need a 5 digit U.S. zip code"
-                sleep 2
-                zip_code
-            else 
-                api_response_hash(zip_code_input.to_i)
-            end
-    end
+  
         
     
 
@@ -176,6 +178,7 @@ class ConcertFinder
             puts "#{index + 1}. #{concert.band.ljust(justified_chars)} | #{concert.date.ljust(justified_chars)} | #{concert.venue.ljust(justified_chars)} | #{concert.address.ljust(justified_chars)} | #{concert.price.ljust(justified_chars)}"
         end
 
+        # select_concert
     end
         
     def select_concert
@@ -190,19 +193,27 @@ class ConcertFinder
     end
 
     def create_new_ticket_from_user
+        # puts "CLI line 195"
+        # puts "Global concert_array: ", $concert_array
+
+        # Ticket.create(customer_id: 4, concert_id: 3)
+
+        
         concert_instance = $concert_array[select_concert]
-        # binding.pry
+        # puts "concert_instance.id: ", concert_instance.id
+        
         #gives customer obj
+        
+        # puts "CONCERT INSTANCE: ", concert_instance
+        
         # customer_id = returning_customer.id
-        customer_id = new_customer_obj
-        binding.pry
-        Ticket.new(customer_id: customer_id, concert_id: concert_instance.id)
-        # binding.pry
+        # puts "CUSTOMER ID: ", customer.id
+        Ticket.create(customer_id: customer.id, concert_id: concert_instance.id)
+        return_user_ticket_confirmation
     end
 
     def return_user_ticket_confirmation
-        # user_selection_number = concert_input - 1
-        # puts "You have successfully purchased ticket"
+        puts "You have successfully purchased ticket"
     end
 
     
