@@ -62,7 +62,6 @@ class ConcertFinder
             username_input = gets.chomp.downcase
             if Customer.find_by(username: username_input)
                 self.customer = Customer.find_by(username: username_input)
-                # binding.pry
                 puts "#{@b} Welcome back #{username_input}!"
             else 
                 puts "#{@b}We couldn't find #{username_input}, so we created a new account!"
@@ -116,7 +115,6 @@ class ConcertFinder
     def api_response_hash(zip_code_input)
         response_string = RestClient.get("https://api.seatgeek.com/2/events?taxonomies.name=concert&postal_code=#{zip_code_input}&client_id=MTk0MjAzMjZ8MTU3MzUwOTAyMy40OQ")
         response_hash = JSON.parse(response_string)
-        # binding.pry
         concert_instantiation(response_hash)
         
 
@@ -146,7 +144,6 @@ class ConcertFinder
             # end 
 
             concert = Concert.create(band: band, date: date, venue: venue, address: address, price: price)
-
             $concert_array << concert
 
         end
@@ -168,19 +165,27 @@ class ConcertFinder
         justified_chars = 30
     
         # PUTS THE CONCERT INFO HEADER ONCE
-        puts "#  #{band_str.ljust(justified_chars)} | #{date_str.ljust(justified_chars)} | #{venue_str.ljust(justified_chars)} | #{address_str.ljust(justified_chars)} | #{price_str.ljust(justified_chars)}"
+        puts "\n#  #{band_str.ljust(justified_chars)} | #{date_str.ljust(justified_chars)} | #{venue_str.ljust(justified_chars)} | #{address_str.ljust(45)} | #{price_str.ljust(justified_chars)}\n"
     
-        # my_concerts = Concert.all.select {|c| c.customer == self.customer}
-        # binding.pry
 
         # PUTS EACH CONCERT INFO IN ROWS
         concert_array.each_with_index do |concert, index|
-            puts "#{index + 1}. #{concert.band.ljust(justified_chars)} | #{concert.date.ljust(justified_chars)} | #{concert.venue.ljust(justified_chars)} | #{concert.address.ljust(justified_chars)} | #{concert.price.ljust(justified_chars)}"
+            puts "#{index + 1}. #{limit_30_chars(concert.band.ljust(justified_chars))} | #{concert.date.ljust(justified_chars)} | #{concert.venue.ljust(justified_chars)} | #{concert.address.ljust(45)} | #{concert.price.ljust(justified_chars)}"
         end
 
-        # select_concert
     end
         
+    def limit_30_chars(band_name)
+        if band_name.length > 31
+            band_name[0, 30]
+        else
+            band_name
+        end
+
+    end
+
+
+
     def select_concert
         puts "#{@b} Please type number for your concert:"
         concert_input = gets.chomp.to_i
@@ -193,30 +198,15 @@ class ConcertFinder
     end
 
     def create_new_ticket_from_user
-        # puts "CLI line 195"
-        # puts "Global concert_array: ", $concert_array
-
-        # Ticket.create(customer_id: 4, concert_id: 3)
-
-        
         concert_instance = $concert_array[select_concert]
-        # puts "concert_instance.id: ", concert_instance.id
-        
-        #gives customer obj
-        
-        # puts "CONCERT INSTANCE: ", concert_instance
-        
-        # customer_id = returning_customer.id
-        # puts "CUSTOMER ID: ", customer.id
         Ticket.create(customer_id: customer.id, concert_id: concert_instance.id)
         return_user_ticket_confirmation
     end
 
     def return_user_ticket_confirmation
-        puts "You have successfully purchased ticket"
+        puts "\nYou have successfully purchased ticket"
     end
 
-    
 
 
 
