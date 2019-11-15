@@ -1,3 +1,8 @@
+require_relative "config/environment"
+require "rest-client"
+require 'json'
+
+
 class ConcertFinder
     require 'pry'
     attr_accessor :customer, :ticket, :concert
@@ -16,14 +21,14 @@ class ConcertFinder
        / /  / _ \| '_ \ / __/ _ \ '__| __|
       / /__| (_) | | | | (_|  __/ |  | |_ 
       \____/\___/|_| |_|\___\___|_|   \__|"
-    sleep 2.6
+    # sleep 2.6
     puts "
          ___ _           _           
         / __(_)_ __   __| | ___ _ __ 
        / _\ | | '_ \ / _` |/ _ \ '__|
       / /   | | | | | (_| |  __/ |   
       \/    |_|_| |_|\__,_|\___|_|   "
-    sleep 2
+    # sleep 2
     puts "\n\nWelcome To ConcertFinder.com!"                                      
     end
 
@@ -87,6 +92,59 @@ class ConcertFinder
 
 
 
+
+    
+
+
+
+
+
+
+
+    def api_response_hash(zip_code_input)
+        response_string = RestClient.get("https://api.seatgeek.com/2/events?taxonomies.name=concert&postal_code=#{zip_code_input}&client_id=MTk0MjAzMjZ8MTU3MzUwOTAyMy40OQ")
+        response_hash = JSON.parse(response_string)
+
+        concert_instantiation(response_hash)
+        
+
+    end
+
+
+
+    def concert_instantiation(response_hash)
+        events = response_hash["events"]
+
+        concert_array = []
+
+        events.each do |event|
+            # event["venue"].each do |venue|
+            band = event["title"]
+            date = event["datetime_utc"]
+            venue = event["venue"]["name"]
+            address = event["venue"]["address"] + ", " + event["venue"]["display_location"]
+            price  = "$" + rand(20..100).to_s
+            
+            # puts "Band: " + band
+            # puts "Date: " + date
+            # puts "Venue: " + venue
+            # puts "Address: " + address
+            # puts "Price: " + price
+            # puts
+            # end 
+
+
+
+            concert = Concert.create(band: band, date: date, venue: venue, address: address, price: price)
+
+            concert_array << concert
+
+        end
+        display_concerts_select(concert_array)
+    end
+
+
+
     def zip_code 
         puts "#{@b} Please type zip code to find upcoming concerts:\n\n"
         zip_code_input = gets.chomp
@@ -95,12 +153,42 @@ class ConcertFinder
                 sleep 2
                 zip_code
             else 
-                zip_code_input.to_i
-                response_string = RestClient.get("https://api.seatgeek.com/2/events?taxonomies.name=concert&postal_code=#{zip_code_input}&client_id=MTk0MjAzMjZ8MTU3MzUwOTAyMy40OQ")
-                puts JSON.parse(response_string) #made dryer
+                api_response_hash(zip_code_input.to_i)
             end
     end
-                
         
-end
+    
+
+    def display_concerts_select(concert_array)
+        band_str = "BAND"
+        date_str = "DATE"
+        venue_str = "VENUE"
+        address_str = "ADDRESS"
+        price_str = "PRICE"
+        justified_chars = 30
+    
+        # PUTS THE CONCERT INFO HEADER ONCE
+        puts "#  #{band_str.ljust(justified_chars)} | #{date_str.ljust(justified_chars)} | #{venue_str.ljust(justified_chars)} | #{address_str.ljust(justified_chars)} | #{price_str.ljust(justified_chars)}"
+    
+        # my_concerts = Concert.all.select {|c| c.customer == self.customer}
+        # binding.pry
+
+        # PUTS EACH CONCERT INFO IN ROWS
+        concert_array.each_with_index do |concert, index|
+            puts "#{index + 1}. #{concert.band.ljust(justified_chars)} | #{concert.date.ljust(justified_chars)} | #{concert.venue.ljust(justified_chars)} | #{concert.address.ljust(justified_chars)} | #{concert.price.ljust(justified_chars)}"
+        end
+    end
+        
+
+
+
+    
+
+
+
+
+
+
+
+end # end of class
   

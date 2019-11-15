@@ -3,33 +3,33 @@ require_relative "../config/environment"
 # puts "Please enter zip code"
 # user_input = gets.chomp
 
-def api_response_hash
-    response_string = RestClient.get("https://api.seatgeek.com/2/events?taxonomies.name=concert&postal_code=94107&client_id=MTk0MjAzMjZ8MTU3MzUwOTAyMy40OQ")
-    response_hash = JSON.parse(response_string)
-    response_hash
-end
+# def api_response_hash(zip_code_input)
+#     response_string = RestClient.get("https://api.seatgeek.com/2/events?taxonomies.name=concert&postal_code=#{zip_code_input}&client_id=MTk0MjAzMjZ8MTU3MzUwOTAyMy40OQ")
+#     response_hash = JSON.parse(response_string)
+#     response_hash
+# end
 
 
-def concert_info
-    events = api_response_hash["events"]
-    events.each do |event|
-        # event["venue"].each do |venue|
-        band = event["title"]
-        date = event["datetime_utc"]
-        venue = event["venue"]["name"]
-        address = event["venue"]["address"] + ", " + event["venue"]["display_location"]
-        price  = "$" + rand(20..100).to_s
+# def concert_info
+#     events = api_response_hash["events"]
+#     events.each do |event|
+#         # event["venue"].each do |venue|
+#         band = event["title"]
+#         date = event["datetime_utc"]
+#         venue = event["venue"]["name"]
+#         address = event["venue"]["address"] + ", " + event["venue"]["display_location"]
+#         price  = "$" + rand(20..100).to_s
         
-        puts "Band: " + band
-        puts "Date: " + date
-        puts "Venue: " + venue
-        puts "Address: " + address
-        puts "Price: " + price
-        puts
-        # end 
-        Concert.create(band: band, date: date, venue: venue, address: address, price: price)
-    end
-end
+#         puts "Band: " + band
+#         puts "Date: " + date
+#         puts "Venue: " + venue
+#         puts "Address: " + address
+#         puts "Price: " + price
+#         puts
+#         # end 
+#         Concert.create(band: band, date: date, venue: venue, address: address, price: price)
+#     end
+# end
 
 
 
@@ -65,9 +65,9 @@ end
 
 
 
-concert_info
+# concert_info
 
 # binding.pry
 
-puts "seed file"
+# puts "seed file"
 
