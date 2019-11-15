@@ -21,30 +21,30 @@ class ConcertFinder
        / /  / _ \| '_ \ / __/ _ \ '__| __|
       / /__| (_) | | | | (_|  __/ |  | |_ 
       \____/\___/|_| |_|\___\___|_|   \__|"
-    # sleep 2.6
+    sleep 2.3
     puts "
          ___ _           _           
         / __(_)_ __   __| | ___ _ __ 
        / _\ | | '_ \ / _` |/ _ \ '__|
       / /   | | | | | (_| |  __/ |   
       \/    |_|_| |_|\__,_|\___|_|   "
-    # sleep 2
+    sleep 2
     puts "\n\nWelcome To ConcertFinder.com!"                                      
     end
 
     def waiting
         t = Time.now  
-        print "\nConnecting you with next available agent" 
+        print "\nConnecting you with the next available agent" 
         wait
         t.strftime('%P') == 'pm' ? greet = "afternoon" : greet = "morning"
         puts "\n#{@b} Good #{greet}! Thanks for waiting."
     end
 
     def wait
-        # 5.times do 
-        #     print "."
-        #     sleep 0.5
-        # end
+        5.times do 
+            print "."
+            sleep 0.5
+        end
     end
 
     def add_customer
@@ -86,15 +86,11 @@ class ConcertFinder
             sleep 2
             create_username
         else
+            sleep 1
             self.customer = Customer.create(username: username_input, name: @n)
             puts "#{@b} #{username_input} is available! Account has been created."
         end
     end
-
-
-
-
-    
 
 
 
@@ -116,12 +112,9 @@ class ConcertFinder
         response_string = RestClient.get("https://api.seatgeek.com/2/events?taxonomies.name=concert&postal_code=#{zip_code_input}&client_id=MTk0MjAzMjZ8MTU3MzUwOTAyMy40OQ")
         response_hash = JSON.parse(response_string)
         concert_instantiation(response_hash)
-        
-
     end
 
    
-    
     # Populates our DB & global concert_array
     def concert_instantiation(response_hash)
         events = response_hash["events"]
@@ -134,18 +127,8 @@ class ConcertFinder
             venue = event["venue"]["name"]
             address = event["venue"]["address"] + ", " + event["venue"]["display_location"]
             price  = "$" + rand(20..100).to_s
-            
-            # puts "Band: " + band
-            # puts "Date: " + date
-            # puts "Venue: " + venue
-            # puts "Address: " + address
-            # puts "Price: " + price
-            # puts
-            # end 
-
             concert = Concert.create(band: band, date: date, venue: venue, address: address, price: price)
             $concert_array << concert
-
         end
         display_concerts_select($concert_array)
     end
@@ -163,12 +146,7 @@ class ConcertFinder
         address_str = "ADDRESS"
         price_str = "PRICE"
         justified_chars = 30
-    
-        # PUTS THE CONCERT INFO HEADER ONCE
         puts "\n#  #{band_str.ljust(justified_chars)} | #{date_str.ljust(justified_chars)} | #{venue_str.ljust(justified_chars)} | #{address_str.ljust(45)} | #{price_str.ljust(justified_chars)}\n"
-    
-
-        # PUTS EACH CONCERT INFO IN ROWS
         concert_array.each_with_index do |concert, index|
             puts "#{index + 1}. #{limit_30_chars(concert.band.ljust(justified_chars))} | #{concert.date.ljust(justified_chars)} | #{concert.venue.ljust(justified_chars)} | #{concert.address.ljust(45)} | #{concert.price.ljust(justified_chars)}"
         end
@@ -181,7 +159,6 @@ class ConcertFinder
         else
             band_name
         end
-
     end
 
 
@@ -189,11 +166,6 @@ class ConcertFinder
     def select_concert
         puts "#{@b} Please type number for your concert:"
         concert_input = gets.chomp.to_i
-            # if concert_input.length != 1 || concert_input.length != 2
-            #     puts "#{@b} Sorry I don't understand. Please try again.."
-            #     sleep 2
-            #     select_concert
-            # end 
         user_selection_number = concert_input - 1
     end
 
@@ -204,7 +176,8 @@ class ConcertFinder
     end
 
     def return_user_ticket_confirmation
-        puts "\nYou have successfully purchased ticket"
+        puts "\nYou have successfully purchased a ticket!"
+        sleep 3
     end
 
 
@@ -214,5 +187,4 @@ class ConcertFinder
 
 
 
-end # end of class
-  
+end 
